@@ -73,16 +73,16 @@ val_dataset = spt.data.FromTorchDataset(
 
 train_dataloader = torch.utils.data.DataLoader(
     dataset=train_dataset,
-    batch_size=64,
-    num_workers=2,
+    batch_size=256,
+    num_workers=8,
     drop_last=True,
     shuffle=True,
 )
 
 val_dataloader = torch.utils.data.DataLoader(
     dataset=val_dataset,
-    batch_size=64,
-    num_workers=2,
+    batch_size=256,
+    num_workers=8,
 )
 
 data = spt.data.DataModule(
@@ -161,17 +161,15 @@ csv_logger = CSVLogger(
 lr_monitor = LearningRateMonitor(logging_interval="step")
 
 trainer = pl.Trainer(
-    max_epochs=1,
-    limit_train_batches=3,
-    limit_val_batches=2,
+    max_epochs=100,
     num_sanity_val_steps=0,
     callbacks=[knn_probe, linear_probe, lr_monitor],
-    accelerator="cpu",
-    devices=1,
-    precision="32-true",
+    accelerator="gpu",
+       devices=1,
+     precision="16-mixed",
     logger=csv_logger,
     log_every_n_steps=1,
-    enable_checkpointing=False,
+    enable_checkpointing=True,
 )
 
 manager = spt.Manager(
