@@ -56,9 +56,7 @@ data_dir = get_data_dir("cifar10")
 cifar_train = torchvision.datasets.CIFAR10(
     root=str(data_dir), train=True, download=True
 )
-cifar_val = torchvision.datasets.CIFAR10(
-    root=str(data_dir), train=False, download=True
-)
+cifar_val = torchvision.datasets.CIFAR10(root=str(data_dir), train=False, download=True)
 
 train_dataset = spt.data.FromTorchDataset(
     cifar_train,
@@ -161,8 +159,8 @@ trainer = pl.Trainer(
     num_sanity_val_steps=0,
     callbacks=[knn_probe, linear_probe, lr_monitor],
     accelerator="gpu",
-       devices=1,
-     precision="16-mixed",
+    devices=1,
+    precision="16-mixed",
     logger=csv_logger,
     log_every_n_steps=1,
     enable_checkpointing=True,

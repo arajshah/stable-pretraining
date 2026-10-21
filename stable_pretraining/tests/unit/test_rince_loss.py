@@ -1,4 +1,3 @@
-
 """Unit tests for RINCELoss."""
 
 import pytest
@@ -31,8 +30,8 @@ class TestRINCELoss:
         pos = logits[idx, (idx + 4) % 8]
 
         expected = (
-            (0.5 * logits.exp().sum(dim=1)).pow(q) - pos.exp().pow(q)
-        ).div(q).mean()
+            ((0.5 * logits.exp().sum(dim=1)).pow(q) - pos.exp().pow(q)).div(q).mean()
+        )
 
         assert actual.ndim == 0
         torch.testing.assert_close(actual, expected)
@@ -50,3 +49,8 @@ class TestRINCELoss:
         assert torch.isfinite(loss).item()
         assert torch.isfinite(z_i.grad).all()
         assert torch.isfinite(z_j.grad).all()
+
+    @pytest.mark.parametrize("lam", [0.01, 1.0, 2.0])
+    def test_valid_lam(self, lam):
+        loss_fn = RINCELoss(lam=lam)
+        assert loss_fn.lam == lam

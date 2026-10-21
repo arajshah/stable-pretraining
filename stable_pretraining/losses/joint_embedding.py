@@ -345,33 +345,34 @@ class NTXEntLoss(InfoNCELoss):
 
         return self._compute(anchors, candidates, targets, mask=mask)
 
+
 class RINCELoss(NTXEntLoss):
     """Robust InfoNCE loss (RINCE)."""
 
     def __init__(
-            self,
-            temperature: float = 0.5,
-            q: float = 1.0,
-            lam: float = 0.5,
+        self,
+        temperature: float = 0.5,
+        q: float = 1.0,
+        lam: float = 0.5,
     ):
         if temperature <= 0:
             raise ValueError("temperature must be positive")
         if not 0 < q <= 1:
             raise ValueError("q must be in (0, 1]")
-        if not 0 < lam < 1:
-            raise ValueError("lam must be in (0, 1)")
+        if lam <= 0:
+            raise ValueError("lam must be positive")
 
         super().__init__(temperature=temperature)
         self.q = q
         self.lam = lam
 
     def _compute(
-            self,
-            anchors: torch.Tensor,
-            candidates: torch.Tensor,
-            targets: torch.Tensor,
-            mask: Optional[torch.Tensor] = None,
-            logit_scale: Optional[torch.Tensor | float] = None,
+        self,
+        anchors: torch.Tensor,
+        candidates: torch.Tensor,
+        targets: torch.Tensor,
+        mask: Optional[torch.Tensor] = None,
+        logit_scale: Optional[torch.Tensor | float] = None,
     ) -> torch.Tensor:
         temperature = self.temperature if logit_scale is None else logit_scale
 

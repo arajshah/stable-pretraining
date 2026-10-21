@@ -68,4 +68,4 @@ __all__ = [
     "VICRegL",
     "VISReg",
     "WMSE",
-    ]
+]

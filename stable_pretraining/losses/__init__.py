@@ -55,4 +55,4 @@ __all__ = [
     "off_diagonal",
     "NegativeCosineSimilarity",
     "VCRegLoss",
-    ]
+]

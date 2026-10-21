@@ -1,4 +1,3 @@
-
 """Unit tests for RINCE functionality."""
 
 import pytest
